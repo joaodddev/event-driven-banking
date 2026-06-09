@@ -1,0 +1,13 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven
+target/
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
