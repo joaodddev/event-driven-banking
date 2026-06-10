@@ -1,0 +1,9 @@
+CREATE TABLE accounts [
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    owner_name VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    balance NUMERIC(19, 2) NOT NULL DEFAULT 0.00,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+];
