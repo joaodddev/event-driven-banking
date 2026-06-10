@@ -3,6 +3,7 @@ package br.com.joaodddev.account_service.service;
 import br.com.joaodddev.account_service.domain.Account;
 import br.com.joaodddev.account_service.dto.AccountRequest;
 import br.com.joaodddev.account_service.dto.AccountResponse;
+import br.com.joaodddev.account_service.dto.BalanceUpdateRequest;
 import br.com.joaodddev.account_service.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,14 @@ public class AccountService {
                 .stream()
                 .map(AccountResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public AccountResponse updateBalance(UUID id, BalanceUpdateRequest request) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        account.setBalance(request.balance());
+        return AccountResponse.from(accountRepository.save(account));
     }
 }
