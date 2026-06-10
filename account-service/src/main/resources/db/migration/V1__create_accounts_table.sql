@@ -1,4 +1,6 @@
-CREATE TABLE accounts [
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE accounts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     owner_name VARCHAR(100) NOT NULL,
     cpf VARCHAR(11) NOT NULL UNIQUE,
@@ -6,4 +8,4 @@ CREATE TABLE accounts [
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-];
+);
