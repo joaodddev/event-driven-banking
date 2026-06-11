@@ -4,10 +4,13 @@ import br.com.joaodddev.account_service.domain.Account;
 import br.com.joaodddev.account_service.dto.AccountRequest;
 import br.com.joaodddev.account_service.dto.AccountResponse;
 import br.com.joaodddev.account_service.dto.BalanceUpdateRequest;
+import br.com.joaodddev.account_service.event.AccountCreatedEvent;
+import br.com.joaodddev.account_service.producer.AccountEventProducer;
 import br.com.joaodddev.account_service.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +19,7 @@ import java.util.UUID;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final AccountEventProducer accountEventProducer;
 
     @Transactional
     public AccountResponse create(AccountRequest request) {
@@ -28,7 +32,17 @@ public class AccountService {
                 .cpf(request.cpf())
                 .build();
 
-        return AccountResponse.from(accountRepository.save(account));
+        account = accountRepository.save(account);
+
+        accountEventProducer.publishAccountCreated(new AccountCreatedEvent(
+                account.getId(),
+                account.getOwnerName(),
+                account.getCpf(),
+                account.getBalance(),
+                account.getCreatedAt()
+        ));
+
+        return AccountResponse.from(account);
     }
 
     @Transactional(readOnly = true)
