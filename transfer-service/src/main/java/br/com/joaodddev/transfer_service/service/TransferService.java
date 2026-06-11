@@ -6,10 +6,13 @@ import br.com.joaodddev.transfer_service.domain.Transfer;
 import br.com.joaodddev.transfer_service.domain.TransferStatus;
 import br.com.joaodddev.transfer_service.dto.TransferRequest;
 import br.com.joaodddev.transfer_service.dto.TransferResponse;
+import br.com.joaodddev.transfer_service.event.TransferCompletedEvent;
+import br.com.joaodddev.transfer_service.producer.TransferEventProducer;
 import br.com.joaodddev.transfer_service.repository.TransferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +22,7 @@ public class TransferService {
 
     private final TransferRepository transferRepository;
     private final AccountClient accountClient;
+    private final TransferEventProducer transferEventProducer;
 
     @Transactional
     public TransferResponse transfer(TransferRequest request) {
@@ -65,7 +69,17 @@ public class TransferService {
         );
 
         transfer.setStatus(TransferStatus.COMPLETED);
-        return TransferResponse.from(transferRepository.save(transfer));
+        transfer = transferRepository.save(transfer);
+
+        transferEventProducer.publishTransferCompleted(new TransferCompletedEvent(
+                transfer.getId(),
+                transfer.getSourceAccountId(),
+                transfer.getTargetAccountId(),
+                transfer.getAmount(),
+                transfer.getCreatedAt()
+        ));
+
+        return TransferResponse.from(transfer);
     }
 
     @Transactional(readOnly = true)
