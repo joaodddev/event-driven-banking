@@ -2,8 +2,9 @@ package br.com.joaodddev.account_service.dto;
 
 import br.com.joaodddev.account_service.domain.Account;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
+import java.time.LocalDateTime;
+
 
 public record AccountResponse(
         UUID id,
