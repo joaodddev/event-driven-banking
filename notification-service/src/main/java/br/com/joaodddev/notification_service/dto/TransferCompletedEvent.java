@@ -1,7 +1,8 @@
 package br.com.joaodddev.notification_service.dto;
 
-import java.math.BigDecimal;
 import java.util.UUID;
+import java.math.BigDecimal;
+
 
 public record TransferCompletedEvent(
         UUID transferId,
