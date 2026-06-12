@@ -1,8 +1,9 @@
 package br.com.joaodddev.notification_service.dto;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
+import java.util.List;
+
 
 public record AccountCreatedEvent(
         UUID accountId,
