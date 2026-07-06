@@ -1,8 +1,8 @@
 package br.com.joaodddev.notification_service.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.List;
 
 
 public record AccountCreatedEvent(
@@ -10,5 +10,5 @@ public record AccountCreatedEvent(
         String ownerName,
         String cpf,
         BigDecimal balance,
-        Object createdAt
+        LocalDateTime createdAt
 ) {}

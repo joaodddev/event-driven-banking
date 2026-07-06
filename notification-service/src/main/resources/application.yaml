@@ -27,9 +27,14 @@ spring:
     bootstrap-servers: localhost:9092
     consumer:
       group-id: notification-service
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      max-poll-records: 500
+      session-timeout-ms: 30000
       properties:
         spring.json.trusted.packages: "*"
         spring.json.use.type.headers: false
+    listener:
+      ack-mode: manual_immediate
+      poll-timeout: 3000
